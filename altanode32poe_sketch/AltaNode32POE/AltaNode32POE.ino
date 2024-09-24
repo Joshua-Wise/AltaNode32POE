@@ -422,32 +422,25 @@ void setup() {
 }
 
 void loop() {
-  if (eth_connected) {
-    HTTPClient http;
-    http.begin(apiUrl); // Use http instead of https unless you've set up a secure connection
-
-    http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-
+ if (eth_connected) {
     for (int i = 0; i < 4; i++) {
       if (digitalRead(buttonPins[i]) == LOW) {
         Serial.printf("Button %d pressed!\n", i + 1);
+        
+        HTTPClient http;
+        http.begin(apiUrl);
+        http.addHeader("Content-Type", "application/x-www-form-urlencoded");
+        
         String httpRequestData = "entryId=" + String(entryValues[i]);
         
-        int httpResponseCode = http.POST(httpRequestData);
-
-        if (httpResponseCode > 0) {
-          String response = http.getString();
-          Serial.println(httpResponseCode);
-          Serial.println(response);
-        } else {
-          Serial.print("Error on sending POST: ");
-          Serial.println(httpResponseCode);
-        }
+        http.sendRequest("POST", httpRequestData);
+        
+        // No need to wait for or process the response
+        http.end();
+        
         delay(500); // Debounce delay
       }
     }
-
-    http.end();
   } else {
     Serial.println("Ethernet not connected. Trying to reconnect...");
     setupEthernet();
