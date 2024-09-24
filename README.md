@@ -1,4 +1,4 @@
-# AltaNode32
+# AltaNode32POE
 A physical control unit for the Avigilon Alta API powered by LILYGO T-Internet-POE.
 
 <img src="https://jwise.dev/content/images/size/w1000/2024/06/altanode.png" width="500" >
